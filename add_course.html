@@ -1,0 +1,21 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Add Course</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head><body>
+<div class="container">
+  <h2>Add Course</h2>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat,msg in messages %}
+      <div class="flash flash-{{ cat }}">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+  <form method="post">
+    <label>Course Name</label>
+    <input type="text" name="course_name" required>
+    <label>Credits</label>
+    <input type="number" name="credits" required>
+    <button class="btn" type="submit">Add Course</button>
+  </form>
+  <p><a href="{{ url_for('index') }}">Back to Dashboard</a></p>
+</div>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body></html>

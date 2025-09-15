@@ -1,0 +1,41 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Report Card</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head><body>
+<div class="container">
+  <h2>Generate Report Card</h2>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat,msg in messages %}
+      <div class="flash flash-{{ cat }}">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+  <form method="post">
+    <label>Enter Roll Number</label>
+    <input type="text" name="roll" required>
+    <button class="btn" type="submit">Show Report</button>
+  </form>
+
+  {% if data %}
+    <h3>Report for {{ data[0]['name'] }} ({{ data[0]['roll_number'] }})</h3>
+    <table>
+      <tr><th>Course</th><th>Grade</th><th>Attendance %</th></tr>
+      {% for row in data %}
+      <tr>
+        <td>{{ row['course_name'] or 'N/A' }}</td>
+        <td>{{ row['grade'] or 'N/A' }}</td>
+        <td>
+          {% if row['total_classes'] %}
+            {{ (row['attended_classes'] / row['total_classes'] * 100) | round(1) }}%
+          {% else %}N/A{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <p>
+      <a class="btn" href="{{ url_for('export_excel', roll=data[0]['roll_number']) }}">Export to Excel</a>
+      <a class="btn" href="{{ url_for('export_pdf', roll=data[0]['roll_number']) }}">Export to PDF</a>
+    </p>
+  {% endif %}
+  <p><a href="{{ url_for('index') }}">Back to Dashboard</a></p>
+</div>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body></html>
